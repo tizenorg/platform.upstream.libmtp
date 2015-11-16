@@ -1240,8 +1240,8 @@ ptp_getobjecthandles (PTPParams* params, uint32_t storage,
 	if (ret == PTP_RC_OK) {
 		ptp_unpack_OH(params, oh, objecthandles, len);
 	} else {
-		if (	(storage == 0xffffffff) &&
-#if 1//defined TIZEN_EXT
+		if ((storage == 0xffffffff) &&
+#ifdef TIZEN_EXT
 			(associationOH == 0xffffffff)
 #else /* TIZEN_EXT */
 			(objectformatcode == 0) &&

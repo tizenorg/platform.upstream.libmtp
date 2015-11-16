@@ -23,6 +23,9 @@
 #ifndef __MTP__UTIL__H
 #define __MTP__UTIL__H
 #include "config.h" // To get HAVE_STRNDUP
+#ifdef TIZEN_EXT
+#include <dlog.h>
+#endif /* TIZEN_EXT */
 
 void data_dump(FILE *f, void *buf, uint32_t nbytes);
 void data_dump_ascii (FILE *f, void *buf, uint32_t n, uint32_t dump_boundry);
@@ -30,6 +33,12 @@ void data_dump_ascii (FILE *f, void *buf, uint32_t n, uint32_t dump_boundry);
 char *strndup (const char *s, size_t n);
 #endif
 
+#ifdef TIZEN_EXT
+#define DLOG_TAG "LIBMTP"
+
+#define LIBMTP_INFO(format, arg...) LOG(LOG_ERROR, DLOG_TAG, format, ##arg)
+#define LIBMTP_ERROR(format, arg...) LOG(LOG_ERROR, DLOG_TAG, format, ##arg)
+#else /* TIZEN_EXT */
 /**
  * Info macro
  */
@@ -51,6 +60,6 @@ char *strndup (const char *s, size_t n);
 	else \
       fprintf(stderr, format, ##args); \
   } while (0)
-
+#endif /* TIZEN_EXT */
 
 #endif //__MTP__UTIL__H

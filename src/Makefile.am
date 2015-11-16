@@ -1,6 +1,6 @@
 lib_LTLIBRARIES = libmtp.la
 
-libmtp_la_CFLAGS = @LIBUSB_CFLAGS@
+libmtp_la_CFLAGS = @LIBUSB_CFLAGS@ $(DLOG_CFLAGS)
 libmtp_la_SOURCES = libmtp.c unicode.c unicode.h util.c util.h playlist-spl.c \
 	gphoto2-endian.h _stdint.h ptp.c ptp.h libusb-glue.h \
 	music-players.h device-flags.h playlist-spl.h mtpz.h \
@@ -74,7 +74,7 @@ endif
 endif
 
 libmtp_la_LDFLAGS=@LDFLAGS@ -no-undefined -export-symbols $(srcdir)/libmtp.sym -version-info $(SOVERSION) $(W32_LDFLAGS)
-libmtp_la_LIBADD=$(W32_LIBS) $(LTLIBICONV) @LIBUSB_LIBS@
+libmtp_la_LIBADD=$(W32_LIBS) $(LTLIBICONV) @LIBUSB_LIBS@ $(DLOG_LIBS)
 libmtp_la_DEPENDENCIES=$(srcdir)/libmtp.sym
 
 DISTCLEANFILES = _stdint.h gphoto2-endian.h

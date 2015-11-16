@@ -1683,7 +1683,7 @@ LIBMTP_mtpdevice_t *LIBMTP_Get_First_Device(void)
     return NULL;
   }
 
-#if 1//defined TIZEN_EXT
+#ifdef TIZEN_EXT
   if (devices == NULL) {
     return NULL;
   }
@@ -2180,6 +2180,7 @@ int LIBMTP_Read_Event(LIBMTP_mtpdevice_t *device, LIBMTP_event_t *event, uint32_
 
   if (ret != PTP_RC_OK) {
     /* Device is closing down or other fatal stuff, exit thread */
+	LIBMTP_INFO("ptp_usb_event_wait ret %u\n", ret);
     return -1;
   }
 
@@ -2327,7 +2328,7 @@ LIBMTP_error_number_t LIBMTP_Get_Connected_Devices(LIBMTP_mtpdevice_t **device_l
   }
 
   /* Assign linked list of devices */
-#if 1//defined TIZEN_EXT
+#ifdef TIZEN_EXT
 	if (devices == NULL) {
 	  *device_list = NULL;
 	  return LIBMTP_ERROR_NO_DEVICE_ATTACHED;
@@ -9115,7 +9116,7 @@ static void update_metadata_cache(LIBMTP_mtpdevice_t *device, uint32_t object_id
   add_object_to_cache(device, object_id);
 }
 
-#if 1//defined TIZEN_EXT
+#ifdef TIZEN_EXT
 int _is_exist_handler(int **object_list, int size, int current_handler)
 {
 	int i;
@@ -9157,8 +9158,14 @@ int LIBMTP_Get_Object_Handles(LIBMTP_mtpdevice_t *device, uint32_t storage,
 
 	ret = ptp_getobjecthandles(params, storageid, PTP_GOH_ALL_FORMATS, parentid, &currentHandles);
 
-	if (ret != PTP_RC_OK)
-		 return ret;
+	if (ret != PTP_RC_OK) {
+		LIBMTP_INFO("LIBMTP_Get_Object_Handles ret %u\n", ret);
+		return ret;
+	}
+
+#ifdef TIZEN_EXT
+	LIBMTP_INFO("LIBMTP_Get_Object_Handles currentHandles.n %u\n", currentHandles.n);
+#endif /* TIZEN_EXT */
 
 	if (currentHandles.n == 0) {
 		add_error_to_errorstack(device, LIBMTP_ERROR_GENERAL,
@@ -9189,6 +9196,7 @@ int LIBMTP_Get_Object_Handles(LIBMTP_mtpdevice_t *device, uint32_t storage,
 MTPObjectInfo *LIBMTP_Get_Object_Info(LIBMTP_mtpdevice_t *device, uint32_t object_id)
 {
 	PTPParams *params = (PTPParams *)device->params;
+	PTPObject *ob;
 	MTPObjectInfo *object_info;
 	uint16_t ret;
 
@@ -9200,13 +9208,42 @@ MTPObjectInfo *LIBMTP_Get_Object_Info(LIBMTP_mtpdevice_t *device, uint32_t objec
 
 	object_info = (MTPObjectInfo *)malloc(sizeof(MTPObjectInfo));
 
-	ret = ptp_getobjectinfo(params, object_id, (PTPObjectInfo *)object_info);
+	ret = ptp_object_want(params, object_id, PTPOBJECT_OBJECTINFO_LOADED, &ob);
 
 	if (ret != PTP_RC_OK) {
 		if (object_info != NULL)
 			free(object_info);
 		return NULL;
 	}
+
+	object_info->StorageID = ob->oi.StorageID;
+	object_info->ObjectFormat = ob->oi.ObjectFormat;
+	object_info->ProtectionStatus = ob->oi.ProtectionStatus;
+	object_info->ObjectCompressedSize = ob->oi.ObjectCompressedSize;
+	object_info->ThumbFormat = ob->oi.ThumbFormat;
+	object_info->ThumbCompressedSize = ob->oi.ThumbCompressedSize;
+	object_info->ThumbPixWidth = ob->oi.ThumbPixWidth;
+	object_info->ThumbPixHeight = ob->oi.ThumbPixHeight;
+	object_info->ImagePixWidth = ob->oi.ImagePixWidth;
+	object_info->ImagePixHeight = ob->oi.ImagePixHeight;
+	object_info->ImageBitDepth = ob->oi.ImageBitDepth;
+
+	object_info->ParentObject = ob->oi.ParentObject;
+	object_info->AssociationType = ob->oi.AssociationType;
+	object_info->AssociationDesc = ob->oi.AssociationDesc;
+	object_info->SequenceNumber = ob->oi.SequenceNumber;
+	object_info->CaptureDate = ob->oi.CaptureDate;
+	object_info->ModificationDate = ob->oi.ModificationDate;
+
+	if (ob->oi.Filename != NULL)
+		object_info->Filename = strdup(ob->oi.Filename);
+	else
+		object_info->Filename = NULL;
+
+	if (ob->oi.Keywords != NULL)
+		object_info->Keywords = strdup(ob->oi.Keywords);
+	else
+		object_info->Keywords = NULL;
 
 	object_info->ObjectFormat = map_ptp_type_to_libmtp_type(object_info->ObjectFormat);
 	object_info->ThumbFormat = map_ptp_type_to_libmtp_type(object_info->ThumbFormat);

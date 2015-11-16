@@ -792,7 +792,7 @@ struct LIBMTP_devicestorage_struct {
   LIBMTP_devicestorage_t *prev; /**< Previous storage */
 };
 
-#if 1//defined TIZEN_EXT
+#ifdef TIZEN_EXT
 struct _MTPObjectInfo {
 	uint32_t StorageID;
 	uint16_t ObjectFormat;
@@ -893,7 +893,7 @@ void LIBMTP_Dump_Errorstack(LIBMTP_mtpdevice_t*);
 
 int LIBMTP_Get_Storage(LIBMTP_mtpdevice_t *, int const);
 int LIBMTP_Format_Storage(LIBMTP_mtpdevice_t *, LIBMTP_devicestorage_t *);
-#if 1//defined TIZEN_EXT
+#ifdef TIZEN_EXT
 int LIBMTP_Get_Object_Handles(LIBMTP_mtpdevice_t *device, uint32_t storage,
 	uint32_t format, uint32_t parent, uint32_t **object_list, uint32_t *object_num);
 MTPObjectInfo *LIBMTP_Get_Object_Info(LIBMTP_mtpdevice_t *device, uint32_t object_id);

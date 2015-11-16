@@ -3,19 +3,20 @@
 Name:       libmtp
 Summary:    Library for media transfer protocol (mtp)
 Version:    1.1.9
-Release:    5
+Release:    8
 Group:      Network & Connectivity/Other
 License:    LGPL-2.1
 Source0:    libmtp-%{version}.tar.gz
 
 # This package would be built only TV
-%if "%{?tizen_profile_name}" != "tv"
-ExcludeArch: %{arm} %ix86 x86_64
+%if "%{?profile}" != "tv"
+ExcludeArch: %arm aarch64 %ix86 x86_64
 %endif
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 BuildRequires: pkgconfig(libusb-1.0)
+BuildRequires: pkgconfig(dlog)
 BuildRequires: libtool-ltdl-devel
 BuildRequires: gettext-devel
 

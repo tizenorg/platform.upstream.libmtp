@@ -670,7 +670,7 @@ LIBMTP_error_number_t LIBMTP_Detect_Raw_Devices(LIBMTP_raw_device_t ** devices,
     // Out of memory
     *devices = NULL;
     *numdevs = 0;
-#if 1//defined TIZEN_EXT
+#ifdef TIZEN_EXT
 	free_mtpdevice_list(devlist);
 #endif /* TIZEN_EXT */
     return LIBMTP_ERROR_MEMORY_ALLOCATION;
@@ -1606,37 +1606,56 @@ ptp_usb_event (PTPParams* params, PTPContainer* event, int wait)
 	ptp_usb = (PTP_USB *)(params->data);
 
 	ret = PTP_RC_OK;
+
+#ifdef TIZEN_EXT
+	LIBMTP_INFO("ptp_usb_event() wait[%d]", wait);
+#endif /* TIZEN_EXT */
+
 	switch(wait) {
 	case PTP_EVENT_CHECK:
-                result = USB_BULK_READ(ptp_usb->handle,
-				     ptp_usb->intep,
-				     (unsigned char *) &usbevent,
-				     sizeof(usbevent),
-				     &xread,
-				     0);
+		result = USB_BULK_READ(ptp_usb->handle,
+			ptp_usb->intep,
+			(unsigned char *) &usbevent,
+			sizeof(usbevent),
+			&xread,
+			0);
+#ifdef TIZEN_EXT
+		LIBMTP_INFO("first PTP_EVENT_CHECK USB_BULK_READ() result[%d]", result);
+#endif /* TIZEN_EXT */
+
 		if (xread == 0)
-		  result = USB_BULK_READ(ptp_usb->handle,
-					 ptp_usb->intep,
-					 (unsigned char *) &usbevent,
-					 sizeof(usbevent),
-				         &xread,
-					 0);
+			result = USB_BULK_READ(ptp_usb->handle,
+				ptp_usb->intep,
+				(unsigned char *) &usbevent,
+				sizeof(usbevent),
+				&xread,
+				0);
+#ifdef TIZEN_EXT
+		LIBMTP_INFO("second PTP_EVENT_CHECK USB_BULK_READ() result[%d]", result);
+#endif /* TIZEN_EXT */
 		if (result < 0) ret = PTP_ERROR_IO;
 		break;
 	case PTP_EVENT_CHECK_FAST:
-                result = USB_BULK_READ(ptp_usb->handle,
-				     ptp_usb->intep,
-				     (unsigned char *) &usbevent,
-				     sizeof(usbevent),
-				     &xread,
-				     ptp_usb->timeout);
+		result = USB_BULK_READ(ptp_usb->handle,
+			ptp_usb->intep,
+			(unsigned char *) &usbevent,
+			sizeof(usbevent),
+			&xread,
+			ptp_usb->timeout);
+#ifdef TIZEN_EXT
+		LIBMTP_INFO("first PTP_EVENT_CHECK_FAST USB_BULK_READ() result[%d]", result);
+#endif /* TIZEN_EXT */
+
 		if (xread == 0)
-		  result = USB_BULK_READ(ptp_usb->handle,
-					 ptp_usb->intep,
-					 (unsigned char *) &usbevent,
-					 sizeof(usbevent),
-				         &xread,
-					 ptp_usb->timeout);
+			result = USB_BULK_READ(ptp_usb->handle,
+				ptp_usb->intep,
+				(unsigned char *) &usbevent,
+				sizeof(usbevent),
+				&xread,
+				ptp_usb->timeout);
+#ifdef TIZEN_EXT
+		LIBMTP_INFO("second PTP_EVENT_CHECK_FAST USB_BULK_READ() result[%d]", result);
+#endif /* TIZEN_EXT */
 		if (result < 0) ret = PTP_ERROR_IO;
 		break;
 	default:
@@ -1720,7 +1739,7 @@ static int init_ptp_usb(PTPParams* params, PTP_USB* ptp_usb, libusb_device* dev)
 
   ret = libusb_open(dev, &device_handle);
   if (ret != LIBUSB_SUCCESS) {
-    perror("libusb_open() failed!");
+    LIBMTP_ERROR("libusb_open() failed! ret[%d]", ret);
     return -1;
   }
   ptp_usb->handle = device_handle;
@@ -1734,7 +1753,7 @@ static int init_ptp_usb(PTPParams* params, PTP_USB* ptp_usb, libusb_device* dev)
       libusb_kernel_driver_active(device_handle, ptp_usb->interface)
   ) {
       if (LIBUSB_SUCCESS != libusb_detach_kernel_driver(device_handle, ptp_usb->interface)) {
-	perror("libusb_detach_kernel_driver() failed, continuing anyway...");
+	LIBMTP_ERROR("libusb_detach_kernel_driver() failed, continuing anyway...");
       }
   }
 
@@ -1748,27 +1767,27 @@ static int init_ptp_usb(PTPParams* params, PTP_USB* ptp_usb, libusb_device* dev)
    */
   ret = libusb_get_active_config_descriptor(dev, &config);
   if (ret != LIBUSB_SUCCESS) {
-    perror("libusb_get_active_config_descriptor(1) failed");
+    LIBMTP_ERROR("libusb_get_active_config_descriptor(1) failed");
     fprintf(stderr, "no active configuration, trying to set configuration\n");
     if (libusb_set_configuration(device_handle, ptp_usb->config) != LIBUSB_SUCCESS) {
-      perror("libusb_set_configuration() failed, continuing anyway...");
+      LIBMTP_ERROR("libusb_set_configuration() failed, continuing anyway...");
     }
     ret = libusb_get_active_config_descriptor(dev, &config);
     if (ret != LIBUSB_SUCCESS) {
-      perror("libusb_get_active_config_descriptor(2) failed");
+      LIBMTP_ERROR("libusb_get_active_config_descriptor(2) failed");
       return -1;
     }
   }
   if (config->bConfigurationValue != ptp_usb->config) {
     fprintf(stderr, "desired configuration different from current, trying to set configuration\n");
     if (libusb_set_configuration(device_handle, ptp_usb->config)) {
-      perror("libusb_set_configuration() failed, continuing anyway...");
+      LIBMTP_ERROR("libusb_set_configuration() failed, continuing anyway...");
     }
     /* Re-fetch the config descriptor if we changed */
     libusb_free_config_descriptor(config);
     ret = libusb_get_active_config_descriptor(dev, &config);
     if (ret != LIBUSB_SUCCESS) {
-      perror("libusb_get_active_config_descriptor(2) failed");
+      LIBMTP_ERROR("libusb_get_active_config_descriptor(2) failed");
       return -1;
     }
   }
