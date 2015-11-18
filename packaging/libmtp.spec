@@ -8,10 +8,7 @@ Group:      Network & Connectivity/Other
 License:    LGPL-2.1
 Source0:    libmtp-%{version}.tar.gz
 
-# This package would be built only TV
-%if "%{?profile}" != "tv"
-ExcludeArch: %arm aarch64 %ix86 x86_64
-%endif
+ExcludeArch: %ix86 x86_64
 
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
