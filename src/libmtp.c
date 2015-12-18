@@ -5514,6 +5514,8 @@ static char *generate_unique_filename(PTPParams* params, char const * const file
   if (check_filename_exists(params, filename))
   {
     extension_position = strrchr(filename,'.');
+    if (extension_position == NULL)
+		return NULL;
 
     char basename[extension_position - filename + 1];
     strncpy(basename, filename, extension_position - filename);

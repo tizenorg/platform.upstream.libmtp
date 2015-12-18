@@ -2,7 +2,7 @@
 
 Name:       libmtp
 Summary:    Library for media transfer protocol (mtp)
-Version:    1.1.9
+Version:    1.1.10
 Release:    8
 Group:      Network & Connectivity/Other
 License:    LGPL-2.1
