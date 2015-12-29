@@ -186,7 +186,9 @@ static int check_interface(char *sysfspath)
   /* Check for dirs that identify endpoints */
   ret = regcomp(&r, "^ep_[0-9a-f]+$", REG_EXTENDED | REG_NOSUB);
   if (ret) {
+#ifdef TIZEN_EXT
     closedir(dir);
+#endif
     return -1;
   }
 

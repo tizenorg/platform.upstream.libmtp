@@ -2919,6 +2919,11 @@ static int sort_storage_by(LIBMTP_mtpdevice_t *device,int const sortby)
       ptr1 = ptr1->next;
     }
 
+#ifdef TIZEN_EXT
+    if(ptr2 == NULL)
+      return -1;
+#endif
+
     // Make our previous entries next point to our next
     if(ptr2->prev != NULL) {
       ptr1 = ptr2->prev;
@@ -5514,9 +5519,10 @@ static char *generate_unique_filename(PTPParams* params, char const * const file
   if (check_filename_exists(params, filename))
   {
     extension_position = strrchr(filename,'.');
+#ifdef TIZEN_EXT
     if (extension_position == NULL)
 		return NULL;
-
+#endif
     char basename[extension_position - filename + 1];
     strncpy(basename, filename, extension_position - filename);
     basename[extension_position - filename] = '\0';
