@@ -54,6 +54,7 @@
 #include <fcntl.h>
 #include <time.h>
 #include <errno.h>
+#include <libexif/exif-data.h>
 #ifdef _MSC_VER // For MSVC++
 #define USE_WINDOWS_IO_H
 #include <io.h>
@@ -8950,6 +8951,112 @@ int LIBMTP_Get_Thumbnail(LIBMTP_mtpdevice_t *device, uint32_t const id,
   return -1;
 }
 
+#ifdef TIZEN_EXT
+int LIBMTP_Get_Thumbnail_From_Exif_Data(LIBMTP_mtpdevice_t *device, uint32_t const id,
+                         unsigned char **data, unsigned int *size)
+{
+  PTPParams *params = (PTPParams *) device->params;
+  uint16_t ret;
+
+  PTPObject *ob;
+  uint32_t offset, maxbytes;
+  uint32_t jpeg_header_size, app1_marker_size;
+
+  unsigned char *jpeg_header = NULL;
+  unsigned char *app1_marker = NULL;
+  ExifData *exif_data = NULL;
+
+  if (!ptp_operation_issupported(params, PTP_OC_GetPartialObject)) {
+	LIBMTP_INFO("ptp_operation_issupported fail - id %d", id);
+    return -1;
+  }
+
+  if (ptp_object_want(params, id, PTPOBJECT_OBJECTINFO_LOADED, &ob) != PTP_RC_OK) {
+    LIBMTP_INFO("ptp_object_want fail - id %d", id);
+    return -2;
+  }
+
+  if (ob->oi.ObjectCompressedSize < 10) {
+    LIBMTP_INFO("ObjectCompressedSize fail - id %d", id);
+    return -3;
+  }
+
+  if (ob->oi.ObjectFormat != PTP_OFC_EXIF_JPEG) {
+    LIBMTP_INFO("ObjectFormat fail - id %d", id);
+    return -4;
+  }
+
+  //Get App1 Marker header
+  ret = ptp_getpartialobject (params, id, 0, 10, &jpeg_header, &jpeg_header_size);
+  if (ret != PTP_RC_OK) {
+    LIBMTP_INFO("first ptp_getpartialobject fail - id %d", id);
+    return -5;
+  }
+
+  if (!((jpeg_header[0] == 0xff) && (jpeg_header[1] == 0xd8))) {    /* 0XFF 0xD8 means SOI (Start Of Image) */
+    LIBMTP_INFO("SOI fail - id %d", id);
+    free(jpeg_header);
+    return -6;
+  }
+
+  if (!((jpeg_header[2] == 0xff) && (jpeg_header[3] == 0xe1))) {    /* 0xFF 0xE1 means App1 Marker (EXIF) */
+    LIBMTP_INFO("App1 Marker fail - id %d", id);
+    free(jpeg_header);
+    return -7;
+  }
+
+  if (0 != memcmp(jpeg_header+6, "Exif", 4)) { /* check exif header */
+    LIBMTP_INFO("Exif Header Check fail");
+    free(jpeg_header);
+    return -8;
+  }
+
+  offset = 2;
+  maxbytes = (jpeg_header[4] << 8 ) + jpeg_header[5];
+  maxbytes += 2; // include end of Image
+
+  free(jpeg_header);
+
+  LIBMTP_INFO("maxbytes is %d", maxbytes);
+
+  //Get App1 Marker : EXIF Data
+  ret = ptp_getpartialobject (params, id, offset, maxbytes, &app1_marker, &app1_marker_size);
+  if (ret != PTP_RC_OK) {
+    LIBMTP_INFO("second ptp_getpartialobject fail - id %d", id);
+    return -9;
+  }
+
+  if (app1_marker == NULL) {
+    LIBMTP_INFO("app1_marker is NULL - id %d", id);
+    return -10;
+  }
+
+  LIBMTP_INFO("app1_marker_size is %d", app1_marker_size);
+
+  exif_data = exif_data_new_from_data(app1_marker, app1_marker_size);
+  if (exif_data == NULL) {
+    LIBMTP_INFO("Exif data is NULL - id %d", id);
+    free(app1_marker);
+    return -11;
+  }
+
+  if (exif_data->data == NULL) {
+    LIBMTP_INFO("thumbnail is NULL - id %d", id);
+    free(app1_marker);
+    return -12;
+  }
+
+  *data = (unsigned char *)malloc(sizeof(unsigned char) * exif_data->size);
+  memcpy(*data, exif_data->data, exif_data->size);
+  free(app1_marker);
+
+  *size = exif_data->size;
+
+  LIBMTP_INFO("thumbnail extract success - size : %d, id : %d", exif_data->size, id);
+
+  return 0;
+}
+#endif /* TIZEN_EXT */
 
 int LIBMTP_GetPartialObject(LIBMTP_mtpdevice_t *device, uint32_t const id,
                             uint64_t offset, uint32_t maxbytes,
