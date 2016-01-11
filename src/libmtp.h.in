@@ -985,6 +985,10 @@ int LIBMTP_Get_Representative_Sample(LIBMTP_mtpdevice_t *, uint32_t const,
                           LIBMTP_filesampledata_t *);
 int LIBMTP_Get_Thumbnail(LIBMTP_mtpdevice_t *, uint32_t const,
                          unsigned char **data, unsigned int *size);
+#ifdef TIZEN_EXT
+int LIBMTP_Get_Thumbnail_From_Exif_Data(LIBMTP_mtpdevice_t *, uint32_t const,
+                         unsigned char **data, unsigned int *size);
+#endif /* TIZEN_EXT */
 
 /**
  * @}
