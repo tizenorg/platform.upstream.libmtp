@@ -101,6 +101,7 @@ LIBMTP_Set_Playlist_Name
 LIBMTP_Set_Album_Name
 LIBMTP_Set_Object_Filename
 LIBMTP_Get_Thumbnail
+LIBMTP_Get_Thumbnail_From_Exif_Data
 LIBMTP_Read_Event
 LIBMTP_GetPartialObject
 LIBMTP_SendPartialObject

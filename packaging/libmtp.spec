@@ -3,7 +3,7 @@
 Name:       libmtp
 Summary:    Library for media transfer protocol (mtp)
 Version:    1.1.9
-Release:    10
+Release:    11
 Group:      Network & Connectivity/Other
 License:    LGPL-2.1
 Source0:    libmtp-%{version}.tar.gz
@@ -14,6 +14,7 @@ Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 BuildRequires: pkgconfig(libusb-1.0)
 BuildRequires: pkgconfig(dlog)
+BuildRequires: pkgconfig(libexif)
 BuildRequires: libtool-ltdl-devel
 BuildRequires: gettext-devel
 
