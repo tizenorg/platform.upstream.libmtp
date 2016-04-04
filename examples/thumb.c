@@ -93,8 +93,19 @@ int main (int argc, char **argv) {
     return 1;
   }
   else {
+#ifdef TIZEN_EXT
+    int rv;
+    rv = read(fd, imagedata, filesize);
+    close(fd);
+
+    if (rv < 0) {
+      printf("Read fail.\n");
+      return 0;
+    }
+#else /* TIZEN_EXT */
     read(fd, imagedata, filesize);
     close(fd);
+#endif /* TIZEN_EXT */
   }
 
   LIBMTP_Init();

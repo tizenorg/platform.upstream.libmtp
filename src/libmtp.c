@@ -214,6 +214,10 @@ static int set_object_filename(LIBMTP_mtpdevice_t *device,
 static char *generate_unique_filename(PTPParams* params, char const * const filename);
 static int check_filename_exists(PTPParams* params, char const * const filename);
 
+#ifdef TIZEN_EXT
+int _is_exist_handler(uint32_t **object_list, int size, int current_handler);
+#endif /* TIZEN_EXT */
+
 /**
  * These are to wrap the get/put handlers to convert from the MTP types to PTP types
  * in a reliable way
@@ -9234,7 +9238,7 @@ static void update_metadata_cache(LIBMTP_mtpdevice_t *device, uint32_t object_id
 }
 
 #ifdef TIZEN_EXT
-int _is_exist_handler(int **object_list, int size, int current_handler)
+int _is_exist_handler(uint32_t **object_list, int size, int current_handler)
 {
 	int i;
 
