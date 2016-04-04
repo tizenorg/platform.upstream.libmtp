@@ -865,8 +865,8 @@ ptp_read_func (
   unsigned char *bytes;
   int expect_terminator_byte = 0;
   unsigned long usb_inep_maxpacket_size;
-  unsigned long context_block_size_1;
-  unsigned long context_block_size_2;
+  unsigned long context_block_size_1 = 0;
+  unsigned long context_block_size_2 = 0;
   uint16_t ptp_dev_vendor_id = ptp_usb->rawdevice.device_entry.vendor_id;
 
   //"iRiver" device special handling
@@ -2100,6 +2100,9 @@ LIBMTP_error_number_t configure_usb_device(LIBMTP_raw_device_t *device,
 
   if (err) {
     libusb_free_device_list (devs, 0);
+#ifdef TIZEN_EXT
+    free (ptp_usb);
+#endif /* TIZEN_EXT */
     LIBMTP_ERROR("LIBMTP PANIC: Unable to find interface & endpoints of device\n");
     return LIBMTP_ERROR_CONNECTING;
   }
@@ -2111,6 +2114,9 @@ LIBMTP_error_number_t configure_usb_device(LIBMTP_raw_device_t *device,
   if (init_ptp_usb(params, ptp_usb, ldevice) < 0) {
     LIBMTP_ERROR("LIBMTP PANIC: Unable to initialize device\n");
     libusb_free_device_list (devs, 0);
+#ifdef TIZEN_EXT
+    free (ptp_usb);
+#endif /* TIZEN_EXT */
     return LIBMTP_ERROR_CONNECTING;
   }
 
@@ -2127,6 +2133,9 @@ LIBMTP_error_number_t configure_usb_device(LIBMTP_raw_device_t *device,
     if(init_ptp_usb(params, ptp_usb, ldevice) <0) {
       LIBMTP_ERROR("LIBMTP PANIC: Could not init USB on second attempt\n");
       libusb_free_device_list (devs, 0);
+#ifdef TIZEN_EXT
+      free (ptp_usb);
+#endif /* TIZEN_EXT */
       return LIBMTP_ERROR_CONNECTING;
     }
 
@@ -2134,6 +2143,9 @@ LIBMTP_error_number_t configure_usb_device(LIBMTP_raw_device_t *device,
     if ((ret = ptp_opensession(params, 1)) == PTP_ERROR_IO) {
       LIBMTP_ERROR("LIBMTP PANIC: failed to open session on second attempt\n");
       libusb_free_device_list (devs, 0);
+#ifdef TIZEN_EXT
+      free (ptp_usb);
+#endif /* TIZEN_EXT */
       return LIBMTP_ERROR_CONNECTING;
     }
   }
@@ -2151,6 +2163,9 @@ LIBMTP_error_number_t configure_usb_device(LIBMTP_raw_device_t *device,
 	    ret);
     libusb_release_interface(ptp_usb->handle, ptp_usb->interface);
     libusb_free_device_list (devs, 0);
+#ifdef TIZEN_EXT
+    free (ptp_usb);
+#endif /* TIZEN_EXT */
     return LIBMTP_ERROR_CONNECTING;
   }
 

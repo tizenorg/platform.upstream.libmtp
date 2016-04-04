@@ -22,7 +22,10 @@
  * Boston, MA  02110-1301  USA
  */
 
+#ifndef TIZEN_EXT
 #define _BSD_SOURCE
+#endif /* TIZEN_EXT */
+
 #include "config.h"
 #include "ptp.h"
 

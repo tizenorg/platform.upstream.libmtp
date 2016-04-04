@@ -134,7 +134,9 @@ int main (int argc, char **argv)
     char *friendlyname;
     char *syncpartner;
     char *sectime;
+#ifndef TIZEN_EXT
     char *devcert;
+#endif /* TIZEN_EXT */
     uint16_t *filetypes;
     uint16_t filetypes_len;
     uint8_t maxbattlevel;
