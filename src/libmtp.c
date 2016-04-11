@@ -2624,7 +2624,7 @@ static int get_all_metadata_fast(LIBMTP_mtpdevice_t *device)
       prop++;
   }
   lasthandle = 0xffffffff;
-  params->objects = calloc (sizeof(PTPObject),cnt);
+  params->objects = calloc (cnt, sizeof(PTPObject));
   prop = props;
   i = -1;
   for (j=0;j<nrofprops;j++) {
@@ -2674,7 +2674,7 @@ static int get_all_metadata_fast(LIBMTP_mtpdevice_t *device)
         newprops = realloc(params->objects[i].mtpprops,
 		(params->objects[i].nrofmtpprops+1)*sizeof(MTPProperties));
       } else {
-        newprops = calloc(sizeof(MTPProperties),1);
+        newprops = calloc(1,sizeof(MTPProperties));
       }
       if (!newprops) return 0; /* FIXME: error handling? */
       params->objects[i].mtpprops = newprops;
@@ -2690,6 +2690,7 @@ static int get_all_metadata_fast(LIBMTP_mtpdevice_t *device)
   /* mark last entry also */
   params->objects[i].flags |= PTPOBJECT_OBJECTINFO_LOADED;
   params->nrofobjects = i+1;
+  free (props);
   /* The device might not give the list in linear ascending order */
   ptp_objects_sort (params);
   return 0;
@@ -7312,7 +7313,7 @@ LIBMTP_folder_t *LIBMTP_Get_Folder_List(LIBMTP_mtpdevice_t *device)
  *        if the device does not support all the characters in the
  *        name.
  * @param parent_id id of parent folder to add the new folder to,
- *        or 0 to put it in the root directory.
+ *        or 0xFFFFFFFF to put it in the root directory.
  * @param storage_id id of the storage to add this new folder to.
  *        notice that you cannot mismatch storage id and parent id:
  *        they must both be on the same storage! Pass in 0 if you
