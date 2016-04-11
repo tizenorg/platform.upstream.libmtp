@@ -29,8 +29,8 @@
 #ifndef LIBMTP_H_INCLUSION_GUARD
 #define LIBMTP_H_INCLUSION_GUARD
 
-#define LIBMTP_VERSION 1.1.9
-#define LIBMTP_VERSION_STRING "1.1.9"
+#define LIBMTP_VERSION 1.1.11
+#define LIBMTP_VERSION_STRING "1.1.11"
 
 /* This handles MSVC pecularities */
 #ifdef _MSC_VER
@@ -127,10 +127,11 @@ typedef enum {
   LIBMTP_FILETYPE_ALBUM,
   LIBMTP_FILETYPE_PLAYLIST,
   LIBMTP_FILETYPE_UNKNOWN,
-
+#ifdef TIZEN_EXT
   //helper enum value
   LIBMTP_FILETYPE_ALL,
   LIBMTP_FILETYPE_ALL_IMAGE,
+#endif /* TIZEN_EXT */
 } LIBMTP_filetype_t;
 
 /**

@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ(2.52)
-AC_INIT([libmtp], [1.1.9], [libmtp-discuss@lists.sourceforge.net])
+AC_INIT([libmtp], [1.1.11], [libmtp-discuss@lists.sourceforge.net])
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE([foreign])
 AC_CONFIG_SRCDIR([src/libmtp.c])
@@ -198,7 +198,6 @@ AC_TYPE_SIZE_T
 AC_STRUCT_ST_BLKSIZE
 
 # Checks for library functions.
-AC_FUNC_MALLOC
 AC_FUNC_MEMCMP
 AC_FUNC_STAT
 AC_CHECK_FUNCS(basename memset select strdup strerror strndup strrchr strtoul usleep mkstemp)
@@ -220,12 +219,12 @@ fi
 # that will always be available. The <stdint.h> file is required by the
 # library, but we provide this anyway because the libptp2 stuff wants this
 # file.
-#AX_NEED_STDINT_H([src/_stdint.h])
+AX_NEED_STDINT_H([src/_stdint.h])
 
 # Create a header file containing NetBSD-style byte swapping macros.
 # This m4 macros has caused severe pain, I am considering creating a
 # hard-coded byte swapper that will be eternally portable.
-#AC_NEED_BYTEORDER_H(src/gphoto2-endian.h)
+AC_NEED_BYTEORDER_H(src/gphoto2-endian.h)
 
 AC_CONFIG_FILES([src/libmtp.h doc/Doxyfile Makefile doc/Makefile src/Makefile
 	examples/Makefile util/Makefile libmtp.sh hotplug.sh libmtp.pc])
