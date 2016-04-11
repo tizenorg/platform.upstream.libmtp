@@ -1728,7 +1728,7 @@ static int init_ptp_usb(PTPParams* params, PTP_USB* ptp_usb, libusb_device* dev)
 
   ret = libusb_open(dev, &device_handle);
   if (ret != LIBUSB_SUCCESS) {
-    perror("libusb_open() failed!");
+    LIBMTP_ERROR("libusb_open() failed! ret[%d]", ret);
     return -1;
   }
   ptp_usb->handle = device_handle;
@@ -1742,7 +1742,7 @@ static int init_ptp_usb(PTPParams* params, PTP_USB* ptp_usb, libusb_device* dev)
       libusb_kernel_driver_active(device_handle, ptp_usb->interface)
   ) {
       if (LIBUSB_SUCCESS != libusb_detach_kernel_driver(device_handle, ptp_usb->interface)) {
-	perror("libusb_detach_kernel_driver() failed, continuing anyway...");
+	LIBMTP_ERROR("libusb_detach_kernel_driver() failed, continuing anyway...");
       }
   }
 
@@ -1756,27 +1756,27 @@ static int init_ptp_usb(PTPParams* params, PTP_USB* ptp_usb, libusb_device* dev)
    */
   ret = libusb_get_active_config_descriptor(dev, &config);
   if (ret != LIBUSB_SUCCESS) {
-    perror("libusb_get_active_config_descriptor(1) failed");
+    LIBMTP_ERROR("libusb_get_active_config_descriptor(1) failed");
     fprintf(stderr, "no active configuration, trying to set configuration\n");
     if (libusb_set_configuration(device_handle, ptp_usb->config) != LIBUSB_SUCCESS) {
-      perror("libusb_set_configuration() failed, continuing anyway...");
+      LIBMTP_ERROR("libusb_set_configuration() failed, continuing anyway...");
     }
     ret = libusb_get_active_config_descriptor(dev, &config);
     if (ret != LIBUSB_SUCCESS) {
-      perror("libusb_get_active_config_descriptor(2) failed");
+      LIBMTP_ERROR("libusb_get_active_config_descriptor(2) failed");
       return -1;
     }
   }
   if (config->bConfigurationValue != ptp_usb->config) {
     fprintf(stderr, "desired configuration different from current, trying to set configuration\n");
     if (libusb_set_configuration(device_handle, ptp_usb->config)) {
-      perror("libusb_set_configuration() failed, continuing anyway...");
+      LIBMTP_ERROR("libusb_set_configuration() failed, continuing anyway...");
     }
     /* Re-fetch the config descriptor if we changed */
     libusb_free_config_descriptor(config);
     ret = libusb_get_active_config_descriptor(dev, &config);
     if (ret != LIBUSB_SUCCESS) {
-      perror("libusb_get_active_config_descriptor(2) failed");
+      LIBMTP_ERROR("libusb_get_active_config_descriptor(2) failed");
       return -1;
     }
   }
