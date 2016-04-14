@@ -81,6 +81,11 @@ typedef unsigned __int64 uint64_t;
  * by the libmtp library interface. The types used internally
  * as PTP-defined enumerator types is something different.
  */
+
+#ifndef EXPORT_API
+#define EXPORT_API
+#endif /* EXPORT_API */
+
 typedef enum {
   LIBMTP_FILETYPE_FOLDER,
   LIBMTP_FILETYPE_WAV,
@@ -842,58 +847,58 @@ typedef enum LIBMTP_event_enum LIBMTP_event_t;
 extern "C" {
 #endif
 
-extern int LIBMTP_debug;
+EXPORT_API extern int LIBMTP_debug;
 
 /**
  * @defgroup internals The libmtp internals API.
  * @{
  */
-void LIBMTP_Set_Debug(int);
-void LIBMTP_Init(void);
-int LIBMTP_Get_Supported_Devices_List(LIBMTP_device_entry_t ** const, int * const);
+EXPORT_API void LIBMTP_Set_Debug(int);
+EXPORT_API void LIBMTP_Init(void);
+EXPORT_API int LIBMTP_Get_Supported_Devices_List(LIBMTP_device_entry_t ** const, int * const);
 /**
  * @}
  * @defgroup basic The basic device management API.
  * @{
  */
-LIBMTP_error_number_t LIBMTP_Detect_Raw_Devices(LIBMTP_raw_device_t **, int *);
-int LIBMTP_Check_Specific_Device(int busno, int devno);
-LIBMTP_mtpdevice_t *LIBMTP_Open_Raw_Device(LIBMTP_raw_device_t *);
-LIBMTP_mtpdevice_t *LIBMTP_Open_Raw_Device_Uncached(LIBMTP_raw_device_t *);
+EXPORT_API LIBMTP_error_number_t LIBMTP_Detect_Raw_Devices(LIBMTP_raw_device_t **, int *);
+EXPORT_API int LIBMTP_Check_Specific_Device(int busno, int devno);
+EXPORT_API LIBMTP_mtpdevice_t *LIBMTP_Open_Raw_Device(LIBMTP_raw_device_t *);
+EXPORT_API LIBMTP_mtpdevice_t *LIBMTP_Open_Raw_Device_Uncached(LIBMTP_raw_device_t *);
 /* Begin old, legacy interface */
-LIBMTP_mtpdevice_t *LIBMTP_Get_First_Device(void);
-LIBMTP_error_number_t LIBMTP_Get_Connected_Devices(LIBMTP_mtpdevice_t **);
-uint32_t LIBMTP_Number_Devices_In_List(LIBMTP_mtpdevice_t *);
-void LIBMTP_Release_Device_List(LIBMTP_mtpdevice_t*);
+EXPORT_API LIBMTP_mtpdevice_t *LIBMTP_Get_First_Device(void);
+EXPORT_API LIBMTP_error_number_t LIBMTP_Get_Connected_Devices(LIBMTP_mtpdevice_t **);
+EXPORT_API uint32_t LIBMTP_Number_Devices_In_List(LIBMTP_mtpdevice_t *);
+EXPORT_API void LIBMTP_Release_Device_List(LIBMTP_mtpdevice_t*);
 /* End old, legacy interface */
-void LIBMTP_Release_Device(LIBMTP_mtpdevice_t*);
-void LIBMTP_Dump_Device_Info(LIBMTP_mtpdevice_t*);
-int LIBMTP_Reset_Device(LIBMTP_mtpdevice_t*);
-char *LIBMTP_Get_Manufacturername(LIBMTP_mtpdevice_t*);
-char *LIBMTP_Get_Modelname(LIBMTP_mtpdevice_t*);
-char *LIBMTP_Get_Serialnumber(LIBMTP_mtpdevice_t*);
-char *LIBMTP_Get_Deviceversion(LIBMTP_mtpdevice_t*);
-char *LIBMTP_Get_Friendlyname(LIBMTP_mtpdevice_t*);
-int LIBMTP_Set_Friendlyname(LIBMTP_mtpdevice_t*, char const * const);
-char *LIBMTP_Get_Syncpartner(LIBMTP_mtpdevice_t*);
-int LIBMTP_Set_Syncpartner(LIBMTP_mtpdevice_t*, char const * const);
-int LIBMTP_Get_Batterylevel(LIBMTP_mtpdevice_t *,
+EXPORT_API void LIBMTP_Release_Device(LIBMTP_mtpdevice_t*);
+EXPORT_API void LIBMTP_Dump_Device_Info(LIBMTP_mtpdevice_t*);
+EXPORT_API int LIBMTP_Reset_Device(LIBMTP_mtpdevice_t*);
+EXPORT_API char *LIBMTP_Get_Manufacturername(LIBMTP_mtpdevice_t*);
+EXPORT_API char *LIBMTP_Get_Modelname(LIBMTP_mtpdevice_t*);
+EXPORT_API char *LIBMTP_Get_Serialnumber(LIBMTP_mtpdevice_t*);
+EXPORT_API char *LIBMTP_Get_Deviceversion(LIBMTP_mtpdevice_t*);
+EXPORT_API char *LIBMTP_Get_Friendlyname(LIBMTP_mtpdevice_t*);
+EXPORT_API int LIBMTP_Set_Friendlyname(LIBMTP_mtpdevice_t*, char const * const);
+EXPORT_API char *LIBMTP_Get_Syncpartner(LIBMTP_mtpdevice_t*);
+EXPORT_API int LIBMTP_Set_Syncpartner(LIBMTP_mtpdevice_t*, char const * const);
+EXPORT_API int LIBMTP_Get_Batterylevel(LIBMTP_mtpdevice_t *,
 			    uint8_t * const,
 			    uint8_t * const);
-int LIBMTP_Get_Secure_Time(LIBMTP_mtpdevice_t *, char ** const);
-int LIBMTP_Get_Device_Certificate(LIBMTP_mtpdevice_t *, char ** const);
-int LIBMTP_Get_Supported_Filetypes(LIBMTP_mtpdevice_t *, uint16_t ** const, uint16_t * const);
-int LIBMTP_Check_Capability(LIBMTP_mtpdevice_t *, LIBMTP_devicecap_t);
-LIBMTP_error_t *LIBMTP_Get_Errorstack(LIBMTP_mtpdevice_t*);
-void LIBMTP_Clear_Errorstack(LIBMTP_mtpdevice_t*);
-void LIBMTP_Dump_Errorstack(LIBMTP_mtpdevice_t*);
+EXPORT_API int LIBMTP_Get_Secure_Time(LIBMTP_mtpdevice_t *, char ** const);
+EXPORT_API int LIBMTP_Get_Device_Certificate(LIBMTP_mtpdevice_t *, char ** const);
+EXPORT_API int LIBMTP_Get_Supported_Filetypes(LIBMTP_mtpdevice_t *, uint16_t ** const, uint16_t * const);
+EXPORT_API int LIBMTP_Check_Capability(LIBMTP_mtpdevice_t *, LIBMTP_devicecap_t);
+EXPORT_API LIBMTP_error_t *LIBMTP_Get_Errorstack(LIBMTP_mtpdevice_t*);
+EXPORT_API void LIBMTP_Clear_Errorstack(LIBMTP_mtpdevice_t*);
+EXPORT_API void LIBMTP_Dump_Errorstack(LIBMTP_mtpdevice_t*);
 
 #define LIBMTP_STORAGE_SORTBY_NOTSORTED 0
 #define LIBMTP_STORAGE_SORTBY_FREESPACE 1
 #define LIBMTP_STORAGE_SORTBY_MAXSPACE  2
 
-int LIBMTP_Get_Storage(LIBMTP_mtpdevice_t *, int const);
-int LIBMTP_Format_Storage(LIBMTP_mtpdevice_t *, LIBMTP_devicestorage_t *);
+EXPORT_API int LIBMTP_Get_Storage(LIBMTP_mtpdevice_t *, int const);
+EXPORT_API int LIBMTP_Format_Storage(LIBMTP_mtpdevice_t *, LIBMTP_devicestorage_t *);
 #ifdef TIZEN_EXT
 int LIBMTP_Get_Object_Handles(LIBMTP_mtpdevice_t *device, uint32_t storage,
 	uint32_t format, uint32_t parent, uint32_t **object_list, uint32_t *object_num);
@@ -905,86 +910,86 @@ int LIBMTP_Get_Num_Objects(LIBMTP_mtpdevice_t *device, uint32_t format, uint32_t
  * Get/set arbitrary properties.  These do not update the cache; should only be used on
  * properties not stored in structs
  */
-char *LIBMTP_Get_String_From_Object(LIBMTP_mtpdevice_t *, uint32_t const, LIBMTP_property_t const);
-uint64_t LIBMTP_Get_u64_From_Object(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API char *LIBMTP_Get_String_From_Object(LIBMTP_mtpdevice_t *, uint32_t const, LIBMTP_property_t const);
+EXPORT_API uint64_t LIBMTP_Get_u64_From_Object(LIBMTP_mtpdevice_t *, uint32_t const,
       LIBMTP_property_t const, uint64_t const);
-uint32_t LIBMTP_Get_u32_From_Object(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API uint32_t LIBMTP_Get_u32_From_Object(LIBMTP_mtpdevice_t *, uint32_t const,
       LIBMTP_property_t const, uint32_t const);
-uint16_t LIBMTP_Get_u16_From_Object(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API uint16_t LIBMTP_Get_u16_From_Object(LIBMTP_mtpdevice_t *, uint32_t const,
       LIBMTP_property_t const, uint16_t const);
-uint8_t LIBMTP_Get_u8_From_Object(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API uint8_t LIBMTP_Get_u8_From_Object(LIBMTP_mtpdevice_t *, uint32_t const,
       LIBMTP_property_t const, uint8_t const);
-int LIBMTP_Set_Object_String(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_Set_Object_String(LIBMTP_mtpdevice_t *, uint32_t const,
       LIBMTP_property_t const, char const * const);
-int LIBMTP_Set_Object_u32(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_Set_Object_u32(LIBMTP_mtpdevice_t *, uint32_t const,
       LIBMTP_property_t const, uint32_t const);
-int LIBMTP_Set_Object_u16(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_Set_Object_u16(LIBMTP_mtpdevice_t *, uint32_t const,
       LIBMTP_property_t const, uint16_t const);
-int LIBMTP_Set_Object_u8(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_Set_Object_u8(LIBMTP_mtpdevice_t *, uint32_t const,
       LIBMTP_property_t const, uint8_t const);
-char const * LIBMTP_Get_Property_Description(LIBMTP_property_t inproperty);
-int LIBMTP_Is_Property_Supported(LIBMTP_mtpdevice_t*, LIBMTP_property_t const,
+EXPORT_API char const * LIBMTP_Get_Property_Description(LIBMTP_property_t inproperty);
+EXPORT_API int LIBMTP_Is_Property_Supported(LIBMTP_mtpdevice_t*, LIBMTP_property_t const,
             LIBMTP_filetype_t const);
-int LIBMTP_Get_Allowed_Property_Values(LIBMTP_mtpdevice_t*, LIBMTP_property_t const,
+EXPORT_API int LIBMTP_Get_Allowed_Property_Values(LIBMTP_mtpdevice_t*, LIBMTP_property_t const,
             LIBMTP_filetype_t const, LIBMTP_allowed_values_t*);
-void LIBMTP_destroy_allowed_values_t(LIBMTP_allowed_values_t*);
+EXPORT_API void LIBMTP_destroy_allowed_values_t(LIBMTP_allowed_values_t*);
 
 /**
  * @}
  * @defgroup files The file management API.
  * @{
  */
-LIBMTP_file_t *LIBMTP_new_file_t(void);
-void LIBMTP_destroy_file_t(LIBMTP_file_t*);
-char const * LIBMTP_Get_Filetype_Description(LIBMTP_filetype_t);
-LIBMTP_file_t *LIBMTP_Get_Filelisting(LIBMTP_mtpdevice_t *);
-LIBMTP_file_t *LIBMTP_Get_Filelisting_With_Callback(LIBMTP_mtpdevice_t *,
+EXPORT_API LIBMTP_file_t *LIBMTP_new_file_t(void);
+EXPORT_API void LIBMTP_destroy_file_t(LIBMTP_file_t*);
+EXPORT_API char const * LIBMTP_Get_Filetype_Description(LIBMTP_filetype_t);
+EXPORT_API LIBMTP_file_t *LIBMTP_Get_Filelisting(LIBMTP_mtpdevice_t *);
+EXPORT_API LIBMTP_file_t *LIBMTP_Get_Filelisting_With_Callback(LIBMTP_mtpdevice_t *,
       LIBMTP_progressfunc_t const, void const * const);
-LIBMTP_file_t * LIBMTP_Get_Files_And_Folders(LIBMTP_mtpdevice_t *,
+EXPORT_API LIBMTP_file_t * LIBMTP_Get_Files_And_Folders(LIBMTP_mtpdevice_t *,
 					     uint32_t const,
 					     uint32_t const);
-LIBMTP_file_t *LIBMTP_Get_Filemetadata(LIBMTP_mtpdevice_t *, uint32_t const);
-int LIBMTP_Get_File_To_File(LIBMTP_mtpdevice_t*, uint32_t, char const * const,
+EXPORT_API LIBMTP_file_t *LIBMTP_Get_Filemetadata(LIBMTP_mtpdevice_t *, uint32_t const);
+EXPORT_API int LIBMTP_Get_File_To_File(LIBMTP_mtpdevice_t*, uint32_t, char const * const,
 			LIBMTP_progressfunc_t const, void const * const);
-int LIBMTP_Get_File_To_File_Descriptor(LIBMTP_mtpdevice_t*,
+EXPORT_API int LIBMTP_Get_File_To_File_Descriptor(LIBMTP_mtpdevice_t*,
 				       uint32_t const,
 				       int const,
 				       LIBMTP_progressfunc_t const,
 				       void const * const);
-int LIBMTP_Get_File_To_Handler(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Get_File_To_Handler(LIBMTP_mtpdevice_t *,
 			       uint32_t const,
 			       MTPDataPutFunc,
 			       void *,
 			       LIBMTP_progressfunc_t const,
 			       void const * const);
-int LIBMTP_Send_File_From_File(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Send_File_From_File(LIBMTP_mtpdevice_t *,
 			       char const * const,
 			       LIBMTP_file_t * const,
 			       LIBMTP_progressfunc_t const,
 			       void const * const);
-int LIBMTP_Send_File_From_File_Descriptor(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Send_File_From_File_Descriptor(LIBMTP_mtpdevice_t *,
 					  int const,
 					  LIBMTP_file_t * const,
 					  LIBMTP_progressfunc_t const,
 					  void const * const);
-int LIBMTP_Send_File_From_Handler(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Send_File_From_Handler(LIBMTP_mtpdevice_t *,
 				  MTPDataGetFunc, void *,
 				  LIBMTP_file_t * const,
 				  LIBMTP_progressfunc_t const,
 				  void const * const);
-int LIBMTP_Set_File_Name(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Set_File_Name(LIBMTP_mtpdevice_t *,
 			 LIBMTP_file_t *,
 			 const char *);
-LIBMTP_filesampledata_t *LIBMTP_new_filesampledata_t(void);
-void LIBMTP_destroy_filesampledata_t(LIBMTP_filesampledata_t *);
-int LIBMTP_Get_Representative_Sample_Format(LIBMTP_mtpdevice_t *,
+EXPORT_API LIBMTP_filesampledata_t *LIBMTP_new_filesampledata_t(void);
+EXPORT_API void LIBMTP_destroy_filesampledata_t(LIBMTP_filesampledata_t *);
+EXPORT_API int LIBMTP_Get_Representative_Sample_Format(LIBMTP_mtpdevice_t *,
                         LIBMTP_filetype_t const,
                         LIBMTP_filesampledata_t **);
-int LIBMTP_Send_Representative_Sample(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_Send_Representative_Sample(LIBMTP_mtpdevice_t *, uint32_t const,
                           LIBMTP_filesampledata_t *);
-int LIBMTP_Get_Representative_Sample(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_Get_Representative_Sample(LIBMTP_mtpdevice_t *, uint32_t const,
                           LIBMTP_filesampledata_t *);
-int LIBMTP_Get_Thumbnail(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_Get_Thumbnail(LIBMTP_mtpdevice_t *, uint32_t const,
                          unsigned char **data, unsigned int *size);
 #ifdef TIZEN_EXT
 int LIBMTP_Get_Thumbnail_From_Exif_Data(LIBMTP_mtpdevice_t *, uint32_t const,
@@ -996,36 +1001,36 @@ int LIBMTP_Get_Thumbnail_From_Exif_Data(LIBMTP_mtpdevice_t *, uint32_t const,
  * @defgroup tracks The track management API.
  * @{
  */
-LIBMTP_track_t *LIBMTP_new_track_t(void);
-void LIBMTP_destroy_track_t(LIBMTP_track_t*);
-LIBMTP_track_t *LIBMTP_Get_Tracklisting(LIBMTP_mtpdevice_t*);
-LIBMTP_track_t *LIBMTP_Get_Tracklisting_With_Callback(LIBMTP_mtpdevice_t*,
+EXPORT_API LIBMTP_track_t *LIBMTP_new_track_t(void);
+EXPORT_API void LIBMTP_destroy_track_t(LIBMTP_track_t*);
+EXPORT_API LIBMTP_track_t *LIBMTP_Get_Tracklisting(LIBMTP_mtpdevice_t*);
+EXPORT_API LIBMTP_track_t *LIBMTP_Get_Tracklisting_With_Callback(LIBMTP_mtpdevice_t*,
       LIBMTP_progressfunc_t const, void const * const);
-LIBMTP_track_t *LIBMTP_Get_Tracklisting_With_Callback_For_Storage(LIBMTP_mtpdevice_t*, uint32_t const,
+EXPORT_API LIBMTP_track_t *LIBMTP_Get_Tracklisting_With_Callback_For_Storage(LIBMTP_mtpdevice_t*, uint32_t const,
       LIBMTP_progressfunc_t const, void const * const);
-LIBMTP_track_t *LIBMTP_Get_Trackmetadata(LIBMTP_mtpdevice_t*, uint32_t const);
-int LIBMTP_Get_Track_To_File(LIBMTP_mtpdevice_t*, uint32_t, char const * const,
+EXPORT_API LIBMTP_track_t *LIBMTP_Get_Trackmetadata(LIBMTP_mtpdevice_t*, uint32_t const);
+EXPORT_API int LIBMTP_Get_Track_To_File(LIBMTP_mtpdevice_t*, uint32_t, char const * const,
 			LIBMTP_progressfunc_t const, void const * const);
-int LIBMTP_Get_Track_To_File_Descriptor(LIBMTP_mtpdevice_t*, uint32_t const, int const,
+EXPORT_API int LIBMTP_Get_Track_To_File_Descriptor(LIBMTP_mtpdevice_t*, uint32_t const, int const,
 			LIBMTP_progressfunc_t const, void const * const);
-int LIBMTP_Get_Track_To_Handler(LIBMTP_mtpdevice_t *, uint32_t const, MTPDataPutFunc,
+EXPORT_API int LIBMTP_Get_Track_To_Handler(LIBMTP_mtpdevice_t *, uint32_t const, MTPDataPutFunc,
       void *, LIBMTP_progressfunc_t const, void const * const);
-int LIBMTP_Send_Track_From_File(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Send_Track_From_File(LIBMTP_mtpdevice_t *,
 			 char const * const, LIBMTP_track_t * const,
                          LIBMTP_progressfunc_t const,
 			 void const * const);
-int LIBMTP_Send_Track_From_File_Descriptor(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Send_Track_From_File_Descriptor(LIBMTP_mtpdevice_t *,
 			 int const, LIBMTP_track_t * const,
                          LIBMTP_progressfunc_t const,
 			 void const * const);
-int LIBMTP_Send_Track_From_Handler(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Send_Track_From_Handler(LIBMTP_mtpdevice_t *,
 			 MTPDataGetFunc, void *, LIBMTP_track_t * const,
                          LIBMTP_progressfunc_t const,
 			 void const * const);
-int LIBMTP_Update_Track_Metadata(LIBMTP_mtpdevice_t *,
+EXPORT_API int LIBMTP_Update_Track_Metadata(LIBMTP_mtpdevice_t *,
 			LIBMTP_track_t const * const);
-int LIBMTP_Track_Exists(LIBMTP_mtpdevice_t *, uint32_t const);
-int LIBMTP_Set_Track_Name(LIBMTP_mtpdevice_t *, LIBMTP_track_t *, const char *);
+EXPORT_API int LIBMTP_Track_Exists(LIBMTP_mtpdevice_t *, uint32_t const);
+EXPORT_API int LIBMTP_Set_Track_Name(LIBMTP_mtpdevice_t *, LIBMTP_track_t *, const char *);
 /** @} */
 
 /**
@@ -1033,14 +1038,14 @@ int LIBMTP_Set_Track_Name(LIBMTP_mtpdevice_t *, LIBMTP_track_t *, const char *);
  * @defgroup folders The folder management API.
  * @{
  */
-LIBMTP_folder_t *LIBMTP_new_folder_t(void);
-void LIBMTP_destroy_folder_t(LIBMTP_folder_t*);
-LIBMTP_folder_t *LIBMTP_Get_Folder_List(LIBMTP_mtpdevice_t*);
-LIBMTP_folder_t *LIBMTP_Get_Folder_List_For_Storage(LIBMTP_mtpdevice_t*,
+EXPORT_API LIBMTP_folder_t *LIBMTP_new_folder_t(void);
+EXPORT_API void LIBMTP_destroy_folder_t(LIBMTP_folder_t*);
+EXPORT_API LIBMTP_folder_t *LIBMTP_Get_Folder_List(LIBMTP_mtpdevice_t*);
+EXPORT_API LIBMTP_folder_t *LIBMTP_Get_Folder_List_For_Storage(LIBMTP_mtpdevice_t*,
 						    uint32_t const);
-LIBMTP_folder_t *LIBMTP_Find_Folder(LIBMTP_folder_t*, uint32_t const);
-uint32_t LIBMTP_Create_Folder(LIBMTP_mtpdevice_t*, char *, uint32_t, uint32_t);
-int LIBMTP_Set_Folder_Name(LIBMTP_mtpdevice_t *, LIBMTP_folder_t *, const char *);
+EXPORT_API LIBMTP_folder_t *LIBMTP_Find_Folder(LIBMTP_folder_t*, uint32_t const);
+EXPORT_API uint32_t LIBMTP_Create_Folder(LIBMTP_mtpdevice_t*, char *, uint32_t, uint32_t);
+EXPORT_API int LIBMTP_Set_Folder_Name(LIBMTP_mtpdevice_t *, LIBMTP_folder_t *, const char *);
 /** @} */
 
 
@@ -1049,50 +1054,50 @@ int LIBMTP_Set_Folder_Name(LIBMTP_mtpdevice_t *, LIBMTP_folder_t *, const char *
  * @defgroup playlists The audio/video playlist management API.
  * @{
  */
-LIBMTP_playlist_t *LIBMTP_new_playlist_t(void);
-void LIBMTP_destroy_playlist_t(LIBMTP_playlist_t *);
-LIBMTP_playlist_t *LIBMTP_Get_Playlist_List(LIBMTP_mtpdevice_t *);
-LIBMTP_playlist_t *LIBMTP_Get_Playlist(LIBMTP_mtpdevice_t *, uint32_t const);
-int LIBMTP_Create_New_Playlist(LIBMTP_mtpdevice_t *, LIBMTP_playlist_t * const);
-int LIBMTP_Update_Playlist(LIBMTP_mtpdevice_t *, LIBMTP_playlist_t * const);
-int LIBMTP_Set_Playlist_Name(LIBMTP_mtpdevice_t *, LIBMTP_playlist_t *, const char *);
+EXPORT_API LIBMTP_playlist_t *LIBMTP_new_playlist_t(void);
+EXPORT_API void LIBMTP_destroy_playlist_t(LIBMTP_playlist_t *);
+EXPORT_API LIBMTP_playlist_t *LIBMTP_Get_Playlist_List(LIBMTP_mtpdevice_t *);
+EXPORT_API LIBMTP_playlist_t *LIBMTP_Get_Playlist(LIBMTP_mtpdevice_t *, uint32_t const);
+EXPORT_API int LIBMTP_Create_New_Playlist(LIBMTP_mtpdevice_t *, LIBMTP_playlist_t * const);
+EXPORT_API int LIBMTP_Update_Playlist(LIBMTP_mtpdevice_t *, LIBMTP_playlist_t * const);
+EXPORT_API int LIBMTP_Set_Playlist_Name(LIBMTP_mtpdevice_t *, LIBMTP_playlist_t *, const char *);
 
 /**
  * @}
  * @defgroup albums The audio/video album management API.
  * @{
  */
-LIBMTP_album_t *LIBMTP_new_album_t(void);
-void LIBMTP_destroy_album_t(LIBMTP_album_t *);
-LIBMTP_album_t *LIBMTP_Get_Album_List(LIBMTP_mtpdevice_t *);
-LIBMTP_album_t *LIBMTP_Get_Album_List_For_Storage(LIBMTP_mtpdevice_t *, uint32_t const);
-LIBMTP_album_t *LIBMTP_Get_Album(LIBMTP_mtpdevice_t *, uint32_t const);
-int LIBMTP_Create_New_Album(LIBMTP_mtpdevice_t *, LIBMTP_album_t * const);
-int LIBMTP_Update_Album(LIBMTP_mtpdevice_t *, LIBMTP_album_t const * const);
-int LIBMTP_Set_Album_Name(LIBMTP_mtpdevice_t *, LIBMTP_album_t *, const char *);
+EXPORT_API LIBMTP_album_t *LIBMTP_new_album_t(void);
+EXPORT_API void LIBMTP_destroy_album_t(LIBMTP_album_t *);
+EXPORT_API LIBMTP_album_t *LIBMTP_Get_Album_List(LIBMTP_mtpdevice_t *);
+EXPORT_API LIBMTP_album_t *LIBMTP_Get_Album_List_For_Storage(LIBMTP_mtpdevice_t *, uint32_t const);
+EXPORT_API LIBMTP_album_t *LIBMTP_Get_Album(LIBMTP_mtpdevice_t *, uint32_t const);
+EXPORT_API int LIBMTP_Create_New_Album(LIBMTP_mtpdevice_t *, LIBMTP_album_t * const);
+EXPORT_API int LIBMTP_Update_Album(LIBMTP_mtpdevice_t *, LIBMTP_album_t const * const);
+EXPORT_API int LIBMTP_Set_Album_Name(LIBMTP_mtpdevice_t *, LIBMTP_album_t *, const char *);
 
 /**
  * @}
  * @defgroup objects The object management API.
  * @{
  */
-int LIBMTP_Delete_Object(LIBMTP_mtpdevice_t *, uint32_t);
-int LIBMTP_Set_Object_Filename(LIBMTP_mtpdevice_t *, uint32_t , char *);
-int LIBMTP_GetPartialObject(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_Delete_Object(LIBMTP_mtpdevice_t *, uint32_t);
+EXPORT_API int LIBMTP_Set_Object_Filename(LIBMTP_mtpdevice_t *, uint32_t , char *);
+EXPORT_API int LIBMTP_GetPartialObject(LIBMTP_mtpdevice_t *, uint32_t const,
                             uint64_t, uint32_t,
                             unsigned char **, unsigned int *);
-int LIBMTP_SendPartialObject(LIBMTP_mtpdevice_t *, uint32_t const,
+EXPORT_API int LIBMTP_SendPartialObject(LIBMTP_mtpdevice_t *, uint32_t const,
                              uint64_t, unsigned char *, unsigned int);
-int LIBMTP_BeginEditObject(LIBMTP_mtpdevice_t *, uint32_t const);
-int LIBMTP_EndEditObject(LIBMTP_mtpdevice_t *, uint32_t const);
-int LIBMTP_TruncateObject(LIBMTP_mtpdevice_t *, uint32_t const, uint64_t);
+EXPORT_API int LIBMTP_BeginEditObject(LIBMTP_mtpdevice_t *, uint32_t const);
+EXPORT_API int LIBMTP_EndEditObject(LIBMTP_mtpdevice_t *, uint32_t const);
+EXPORT_API int LIBMTP_TruncateObject(LIBMTP_mtpdevice_t *, uint32_t const, uint64_t);
 
 /**
  * @}
  * @defgroup files The events API.
  * @{
  */
-int LIBMTP_Read_Event(LIBMTP_mtpdevice_t *, LIBMTP_event_t *, uint32_t *);
+EXPORT_API int LIBMTP_Read_Event(LIBMTP_mtpdevice_t *, LIBMTP_event_t *, uint32_t *);
 
 /** @} */
 

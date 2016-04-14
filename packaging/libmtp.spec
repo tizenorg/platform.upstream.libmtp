@@ -34,7 +34,7 @@ This package contains the development files.
 %setup -q -n %{name}-%{version}
 
 %build
-export CFLAGS+=" -fPIC -DTIZEN_EXT -flto"
+export CFLAGS+=" -fPIC -DTIZEN_EXT -flto -fvisibility=hidden -DEXPORT_API=\"__attribute__((visibility(\\\"default\\\")))\" "
 export LDFLAGS+=" -Wl,--hash-style=both -Wl,--as-needed -Wl,--rpath=%{_libdir}"
 %autogen
 %configure --prefix=/usr --disable-static
