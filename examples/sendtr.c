@@ -220,7 +220,7 @@ int sendtrack_function(char * from_path, char * to_path, char *partist, char *pa
     return 0;
   }
 
-  filesize = sb.st_size;
+  filesize = (uint64_t)sb.st_size;
 
   trackmeta = LIBMTP_new_track_t();
   trackmeta->filetype = find_filetype (from_path);
